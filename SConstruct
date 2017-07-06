@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#  Copyright (c) 2016 John D. Haughton
+#  Copyright (c) 2017 John D. Haughton
 # 
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 source  = ['Source/sternh.cpp']
 binary  = 'sternh'
 app     = 'Sternhalma'
-version = '0.0.0'
+version = '0.0.1'
 
 # Get a build environment
 env = SConscript('Platform/build.scons', ['source', 'app', 'version'])
