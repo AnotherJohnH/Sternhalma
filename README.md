@@ -11,6 +11,8 @@ running on the Kindle a third-party terminal emulator and launcher is not necess
 
 ## Status
 
+[![Build Status](https://travis-ci.org/AnotherJohnH/Sternhalma.svg?branch=master)](https://travis-ci.org/AnotherJohnH/Sternhalma)
+
 ## How to run
 
 ## How to build
