@@ -2,8 +2,6 @@
 
 Also known as Chinese Chequers.
 
-A Z-code engine for playing interactive fiction games.
-
 Portability of the application between different platforms is a particular goal, and specifically
 portability to the third generation Kindle (aka Kindle Keyboard) which appears as an ideal
 platform for playing interactive fiction.
