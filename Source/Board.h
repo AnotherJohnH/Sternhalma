@@ -94,7 +94,7 @@ public:
       unsigned x, y;
       if (!getXY(pos, x, y)) return;
 
-      char lch, rch;
+      char lch{}, rch{};
 
       x += offset_x;
       y += offset_y;
