@@ -90,7 +90,7 @@ private:
       }
    }
 
-   virtual int launch(PLT::Device& term) override
+   virtual int startWithTerminal(PLT::Device& term) override
    {
       PLT::Curses  win(&term);
 
