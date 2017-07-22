@@ -25,8 +25,6 @@
 
 #include  "TerminalApp.h"
 
-#include  "STB/License.h"
-
 
 #define  PROGRAM         "Sternhalma"
 #define  DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
@@ -112,10 +110,9 @@ private:
 
 public:
    Sternhalma(int argc_, const char* argv_[])
-      : TerminalApp(argc_, argv_,
-                    PROGRAM, AUTHOR, DESCRIPTION, VERSION, COPYRIGHT_YEAR, MIT_LICENSE)
+      : TerminalApp(PROGRAM, AUTHOR, DESCRIPTION, VERSION, COPYRIGHT_YEAR)
    {
-      parseArgsAndStart();
+      parseArgsAndStart(argc_, argv_);
    }
 };
 
