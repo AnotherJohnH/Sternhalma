@@ -37,7 +37,7 @@ class Sternhalma : public TerminalApp
 {
 private:
    STB::Option<unsigned>   num_players{  'p', "players", "Number of players",    2};
-   STB::Option<unsigned>   size{         's', "size",    "Size [3-7]",           5};
+   STB::Option<unsigned>   size{         's', "size",    "Size [3-9]",           5};
    STB::Option<unsigned>   speed{        'T', "speed",   "Speed of play (ms)", 500};
    STB::Option<unsigned>   human_players{'H', "humans",  "Number of humans",     0};
 
@@ -88,7 +88,7 @@ private:
       }
    }
 
-   virtual int startWithTerminal(PLT::Device& term) override
+   virtual int startTerminalApp(PLT::Device& term) override
    {
       PLT::Curses  win(&term);
 
