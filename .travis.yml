@@ -1,15 +1,9 @@
 
 os:
   - linux
-  - osx
 
 dist: trusty
 sudo: required
-
-addons:
-  apt:
-    packages:
-    - libsdl2-dev
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
@@ -21,7 +15,6 @@ language: cpp
 script: scons
 
 compiler:
-    - clang
     - gcc
 
 env:
@@ -34,6 +27,9 @@ before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 addons:
+  apt:
+    packages:
+    - libsdl2-dev
   coverity_scan:
     project:
       name: "AnotherJohnH/Sternhalma"
