@@ -23,7 +23,7 @@
 source  = ['Source/sternh.cpp']
 binary  = 'sternh'
 app     = 'Sternhalma'
-version = '0.0.1'
+version = '0.0.2'
 
 # Get a build environment
 env = SConscript('Platform/Source/build.scons', ['source', 'app', 'version'])
