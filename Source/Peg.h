@@ -225,8 +225,8 @@ private:
       return 1000000 + dist_before - dist_after;
    }
 
-   Board<N>*  board;
-   uint8_t    id;
+   Board<N>*  board{nullptr};
+   uint8_t    id{0};
    Pos60      target;
    Pos60      pos;
    MoveList   move_list;
