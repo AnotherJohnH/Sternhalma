@@ -166,17 +166,17 @@ public:
       }
    }
 
-   void delay() const
+   void setWait(bool wait) const
    {
-      (void) win.getch();
-   }
-
-   char getch() const
-   {
-      int prev_timeout = win.timeout(0);
-      char ch = win.getch();
-      win.timeout(prev_timeout);
-      return ch;
+      static int prev_timeout{0};
+      if (wait)
+      {
+         prev_timeout = win.timeout(0);
+      }
+      else
+      {
+         win.timeout(prev_timeout);
+      }
    }
 
    void refresh() const

@@ -123,25 +123,39 @@ public:
    }
 
    //! Do the best move
-   void doBestMove()
+   //  Returns true when the move is complete
+   bool doBestMove(bool start_move)
    {
-      board->showAction(pos, ACT_PICK);
-      board->delay();
+      if (start_move)
+      {
+         board->showAction(pos, ACT_PICK);
+
+         move_it = best_move->getDirections().begin();
+         return false;
+      }
+
       board->showAction(pos, ACT_NONE);
 
-      Pos60 p = pos;
-
-      for(Dir60 dir : best_move->getDirections())
+      if (pos == best_move->getEnd())
       {
-         p.move(dir, best_move->isStep() ? 1 : 2);
-         move(p);
-
-         bool is_final = p == best_move->getEnd();
-
-         board->showAction(pos, is_final ? ACT_DROP : ACT_HOP);
-         board->delay();
-         board->showAction(pos, ACT_NONE);
+         return true;
       }
+
+      Pos60 next_pos = pos;
+      Dir60 dir = *move_it;
+      next_pos.move(dir, best_move->isStep() ? 1 : 2);
+      move(next_pos);
+
+      if (pos == best_move->getEnd())
+      {
+         board->showAction(pos, ACT_DROP);
+      }
+      else
+      {
+         move_it++;
+         board->showAction(pos, ACT_HOP);
+      }
+      return false;
    }
 
 private:
@@ -232,6 +246,8 @@ private:
    MoveList   move_list;
    unsigned   best_move_score{0};
    Move*      best_move{nullptr};
+
+   std::vector<Dir60>::const_iterator  move_it;
 };
 
 #endif

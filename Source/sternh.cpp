@@ -20,10 +20,11 @@
 // SOFTWARE.
 //------------------------------------------------------------------------------
 
-#include "Player.h"
-#include "Board.h"
+#include "Game.h"
 
 #include  "TerminalApp.h"
+
+#include  "PLT/Event.h"
 
 
 #define  PROGRAM         "Sternhalma"
@@ -36,56 +37,14 @@
 class Sternhalma : public TerminalApp
 {
 private:
-   STB::Option<unsigned>   num_players{  'p', "players", "Number of players",    2};
-   STB::Option<unsigned>   size{         's', "size",    "Size [3-9]",           5};
-   STB::Option<unsigned>   speed{        'T', "speed",   "Speed of play (ms)", 500};
-   STB::Option<unsigned>   human_players{'H', "humans",  "Number of humans",     0};
+   GameOptions  options;
 
    template <unsigned SIZE>
    void play(PLT::Curses& win)
    {
-      while(true)
-      {
-         Board<SIZE>   board(win);
-         Player<SIZE>  players[6];
+      Game<SIZE>  game(win, options);
 
-         for(unsigned i=0; i<num_players; i++)
-         {
-            players[i].initialise(board, 1 + i*(6.0/num_players),
-                                  i < human_players);
-         }
-
-         win.timeout(speed);
-
-         unsigned turn = 0;
-
-         for(unsigned i=0; true; )
-         {
-            char text[16];
-            sprintf(text, "Player %d", i + 1);
-            win.mvaddstr(1, win.cols - 15, text);
-
-            sprintf(text, "%3u", ++turn);
-            win.mvaddstr(1, win.cols - 3, text);
-
-            char ch = win.getch();
-            if ((ch == -1) || (ch == 'q')) return;
-
-            players[i].takeATurn();
-
-            if (players[i].areAllPegsHome())
-            {
-               break;
-            }
-
-            if (++i == num_players) i = 0;
-         }
-
-         win.timeout(0);
-
-         char ch = win.getch();
-         if ((ch == -1) || (ch == 'q')) return;
-      }
+      PLT::mainLoop(Game<SIZE>::doIterate, &game);
    }
 
    virtual int startTerminalApp(PLT::Device& term) override
@@ -94,7 +53,7 @@ private:
 
       win.clear();
 
-      switch(size)
+      switch(options.size)
       {
       case 3: play<3>(win); break;
       case 4: play<4>(win); break;

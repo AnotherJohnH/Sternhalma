@@ -37,6 +37,9 @@ public:
    //! Put a players pieces into their initial positions
    void initialise(Board<N>& board_, unsigned id_, bool human_)
    {
+      // Allow re-initialisation
+      new (this) Player();
+
       board = &board_;
       human = human_;
 
@@ -79,16 +82,10 @@ public:
    }
 
    //! Player takes a turn
-   void takeATurn()
+   bool takeATurn(bool start_turn, uint8_t ch)
    {
-      if (human)
-      {
-         humanTurn();
-      }
-      else
-      {
-         computerTurn();
-      }
+      return human ? humanTurn(start_turn, ch)
+                   : computerTurn(start_turn);
    }
 
    bool areAllPegsHome() const
@@ -104,103 +101,107 @@ public:
    }
 
 private:
-   void humanTurn()
+   enum { START, STEP, HOP } move_state{START};
+   size_t peg_index{0};
+
+   bool humanTurn(bool start_turn, uint8_t ch)
    {
-      enum { START, STEP, HOP, DONE } state = START;
-
-      size_t index = 0;
-      Pos60  start_pos;
-
-      while(state != DONE)
+      if (start_turn)
       {
-         Peg<N>& peg = peg_list[index];
+         move_state = START;
+         peg_index = 0;
+         Peg<N>& peg = peg_list[peg_index];
+         board->showAction(peg.getPos(), ACT_PICK);
+         board->setWait(true);
+         return false;
+      }
 
-         switch(state)
+      Peg<N>* peg = &peg_list[peg_index];
+
+      board->showAction(peg->getPos(), ACT_NONE);
+
+      Dir60   dir;
+
+      switch(ch)
+      {
+      case PLT::LEFT:
+         peg_index = (peg_index == peg_list.size() - 1) ? 0 : peg_index + 1;
+         peg = &peg_list[peg_index];
+         break;
+
+      case PLT::RIGHT:
+         peg_index = (peg_index == 0) ? peg_list.size() - 1 : peg_index - 1;
+         peg = &peg_list[peg_index];
+         break;
+
+      case PLT::RETURN:
+         if ((move_state == STEP) || (move_state == HOP))
          {
-         case START: board->showAction(peg.getPos(), ACT_PICK); break;
-         case STEP:  board->showAction(peg.getPos(), ACT_DROP); break;
-         case HOP:   board->showAction(peg.getPos(), ACT_HOP);  break;
-         default: break;
+            board->setWait(false);
+            return true;
          }
+         break;
 
-         uint8_t ch = board->getch();
-
-         board->showAction(peg.getPos(), ACT_NONE);
-
-         Dir60 dir;
-
-         switch(ch)
+      case 'r': dir.rotRight(); // fall through ...
+      case 'd': dir.rotRight(); // fall through ...
+      case 'c': dir.rotRight(); // fall through ...
+      case 'v': dir.rotRight(); // fall through ...
+      case 'g': dir.rotRight(); // fall through ...
+      case 't':
+         switch(move_state)
          {
-         case 'q':
-            return;
-
-         case PLT::LEFT:
-            if (state != START)
-            {
-               //pos = start_pos;
-            }
-            index = (index == peg_list.size() - 1) ? 0 : index + 1;
+         case START:
+                 if (peg->tryStep(dir)) { move_state = STEP; }
+            else if (peg->tryHop(dir))  { move_state = HOP;  }
             break;
 
-         case PLT::RIGHT:
-            index = (index == 0) ? peg_list.size() - 1 : index - 1;
-            break;
-
-         case PLT::RETURN:
-            if ((state == STEP) || (state == HOP))
-            {
-               state = DONE;
-            }
-            break;
-
-         case 'r': dir.rotRight(); // fall through ...
-         case 'd': dir.rotRight(); // fall through ...
-         case 'c': dir.rotRight(); // fall through ...
-         case 'v': dir.rotRight(); // fall through ...
-         case 'g': dir.rotRight(); // fall through ...
-         case 't':
-            switch(state)
-            {
-            case START:
-               //start_pos = pos;
-                    if (peg.tryStep(dir)) { state = STEP; }
-               else if (peg.tryHop(dir))  { state = HOP;  }
-               break;
-
-            case HOP:
-               peg.tryHop(dir);
-               break;
-
-            default:
-               break;
-            }
+         case HOP:
+            peg->tryHop(dir);
             break;
 
          default:
             break;
-         }
+          }
+         break;
+
+      default:
+         break;
       }
+
+      switch(move_state)
+      {
+      case START: board->showAction(peg->getPos(), ACT_PICK); break;
+      case STEP:  board->showAction(peg->getPos(), ACT_DROP); break;
+      case HOP:   board->showAction(peg->getPos(), ACT_HOP);  break;
+      default: break;
+      }
+
+      return false;
    }
 
-   void computerTurn()
+   bool computerTurn(bool start_turn)
    {
-      unsigned best_move_score = 0;
-      Peg<N>*  best_peg_to_move{nullptr};
-
-      for(auto& peg : peg_list)
+      if (start_turn)
       {
-         unsigned score = peg.findMoves(/* keep_all_moves */ false);
+         best_peg_to_move = nullptr;
 
-         if (score > best_move_score)
+         unsigned best_move_score = 0;
+
+         for(auto& peg : peg_list)
          {
-            best_move_score = score;
-            best_peg_to_move = &peg;
+            unsigned score = peg.findMoves(/* keep_all_moves */ false);
+
+            if (score > best_move_score)
+            {
+               best_move_score = score;
+               best_peg_to_move = &peg;
+            }
          }
       }
 
       assert(best_peg_to_move != nullptr);
 
-      best_peg_to_move->doBestMove();
+      return best_peg_to_move->doBestMove(start_turn);
    }
 
    static constexpr unsigned triangularNumber(unsigned n)
@@ -214,6 +215,7 @@ private:
    bool                         human{false};
    Dir60                        across;
    std::array<Peg<N>,COUNTERS>  peg_list;
+   Peg<N>*                      best_peg_to_move{nullptr};
 };
 
 #endif
