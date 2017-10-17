@@ -29,23 +29,20 @@ class Dir60
 public:
    Dir60() = default;
 
-   Dir60(signed n)
-   {
-      rotRight(n);
-   }
+   Dir60(signed n) { rotRight(n); }
 
    //! Returns the direction as an angle (degrees)
    operator unsigned() const { return (STEP / 2) + value * STEP; }
 
    //! Rotate the direction 'n' increments of 60 degrees to the right (clockwise)
-   Dir60 rotRight(signed n=1)
+   Dir60 rotRight(signed n = 1)
    {
       value = (value + n + N) % N;
       return *this;
    }
 
    //! Rotate the direction 'n' increments of 60 degrees to the left (anti-clockwise)
-   Dir60 rotLeft(signed n=1)
+   Dir60 rotLeft(signed n = 1)
    {
       rotRight(-n);
       return *this;

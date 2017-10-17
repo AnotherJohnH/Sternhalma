@@ -38,7 +38,7 @@ public:
    void initialise(Board<N>& board_, unsigned id_, bool human_)
    {
       // Allow re-initialisation
-      new (this) Player();
+      new(this) Player();
 
       board = &board_;
       human = human_;
@@ -56,9 +56,9 @@ public:
       home.move(back, N);
 
       // Find one end of the front starting row
-      Pos60  row;
+      Pos60 row;
 
-      Dir60  dir(id_ - 1);
+      Dir60 dir(id_ - 1);
       row.move(dir, N);
 
       dir.rotLeft();
@@ -66,11 +66,11 @@ public:
 
       unsigned i = 0;
 
-      for(unsigned j=N; j>=1; j--)
+      for(unsigned j = N; j >= 1; j--)
       {
          Pos60 pos = row;
 
-         for(unsigned k=0; k<j; k++)
+         for(unsigned k = 0; k < j; k++)
          {
             peg_list[i++].initialise(board_, id_, home, pos);
 
@@ -94,22 +94,28 @@ public:
 
       for(auto& peg : peg_list)
       {
-         if (!peg.isHome()) return false;
+         if(!peg.isHome()) return false;
       }
 
       return home;
    }
 
 private:
-   enum { START, STEP, HOP } move_state{START};
+   enum
+   {
+      START,
+      STEP,
+      HOP
+   } move_state{START};
+
    size_t peg_index{0};
 
    bool humanTurn(bool start_turn, uint8_t ch)
    {
-      if (start_turn)
+      if(start_turn)
       {
-         move_state = START;
-         peg_index = 0;
+         move_state  = START;
+         peg_index   = 0;
          Peg<N>& peg = peg_list[peg_index];
          board->showAction(peg.getPos(), ACT_PICK);
          board->setWait(true);
@@ -120,22 +126,22 @@ private:
 
       board->showAction(peg->getPos(), ACT_NONE);
 
-      Dir60   dir;
+      Dir60 dir;
 
       switch(ch)
       {
       case PLT::LEFT:
          peg_index = (peg_index == peg_list.size() - 1) ? 0 : peg_index + 1;
-         peg = &peg_list[peg_index];
+         peg       = &peg_list[peg_index];
          break;
 
       case PLT::RIGHT:
          peg_index = (peg_index == 0) ? peg_list.size() - 1 : peg_index - 1;
-         peg = &peg_list[peg_index];
+         peg       = &peg_list[peg_index];
          break;
 
       case PLT::RETURN:
-         if ((move_state == STEP) || (move_state == HOP))
+         if((move_state == STEP) || (move_state == HOP))
          {
             board->setWait(false);
             return true;
@@ -181,7 +187,7 @@ private:
 
    bool computerTurn(bool start_turn)
    {
-      if (start_turn)
+      if(start_turn)
       {
          best_peg_to_move = nullptr;
 
@@ -191,9 +197,9 @@ private:
          {
             unsigned score = peg.findMoves(/* keep_all_moves */ false);
 
-            if (score > best_move_score)
+            if(score > best_move_score)
             {
-               best_move_score = score;
+               best_move_score  = score;
                best_peg_to_move = &peg;
             }
          }

@@ -25,33 +25,37 @@
 
 #include "STB/Option.h"
 
-#include "Player.h"
 #include "Board.h"
+#include "Player.h"
 
 
 struct GameOptions
 {
-   STB::Option<unsigned>   num_players{  'p', "players", "Number of players",    2};
-   STB::Option<unsigned>   size{         's', "size",    "Size [3-9]",           5};
-   STB::Option<unsigned>   speed{        'T', "speed",   "Speed of play (ms)", 500};
-   STB::Option<unsigned>   human_players{'H', "humans",  "Number of humans",     0};
+   STB::Option<unsigned> num_players{  'p', "players", "Number of players", 2};
+   STB::Option<unsigned> size{         's', "size",    "Size [3-9]", 5};
+   STB::Option<unsigned> speed{        'T', "speed",   "Speed of play (ms)", 500};
+   STB::Option<unsigned> human_players{'H', "humans",  "Number of humans", 0};
 };
 
 
-template <unsigned SIZE>
-class Game
+template <unsigned SIZE> class Game
 {
 public:
-   enum Mode { START_GAME, START_TURN, MID_TURN};
+   enum Mode
+   {
+      START_GAME,
+      START_TURN,
+      MID_TURN
+   };
 
-   PLT::Curses&        win;
-   const GameOptions&  options;
-   Board<SIZE>         board;
-   Player<SIZE>        players[6];
-   int8_t              ch{'\0'};
-   unsigned            i{0};
-   unsigned            turn{0};
-   Mode                mode{START_GAME};
+   PLT::Curses&       win;
+   const GameOptions& options;
+   Board<SIZE>        board;
+   Player<SIZE>       players[6];
+   int8_t             ch{'\0'};
+   unsigned           i{0};
+   unsigned           turn{0};
+   Mode               mode{START_GAME};
 
    Game(PLT::Curses& win_, const GameOptions& options_)
       : win(win_)
@@ -68,14 +72,14 @@ public:
       case START_GAME:
          board.clear();
 
-         for(i=0; i<options.num_players; i++)
+         for(i = 0; i < options.num_players; i++)
          {
-            players[i].initialise(board, 1 + i*(6.0/options.num_players),
+            players[i].initialise(board, 1 + i * (6.0 / options.num_players),
                                   i < options.human_players);
          }
 
          turn = 0;
-         i = 0;
+         i    = 0;
 
          win.timeout(options.speed);
 
@@ -90,16 +94,16 @@ public:
          win.mvaddstr(1, win.cols - 3, text);
 
       case MID_TURN:
-         if (players[i].takeATurn(mode == START_TURN, ch))
+         if(players[i].takeATurn(mode == START_TURN, ch))
          {
-            if (players[i].areAllPegsHome())
+            if(players[i].areAllPegsHome())
             {
                win.timeout(0);
                mode = START_GAME;
             }
             else
             {
-               if (++i == options.num_players) i = 0;
+               if(++i == options.num_players) i = 0;
                mode = START_TURN;
             }
          }

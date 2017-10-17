@@ -23,9 +23,9 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <cstdio>
-#include <cassert>
 #include <array>
+#include <cassert>
+#include <cstdio>
 #include <vector>
 
 #include "PLT/Curses.h"
@@ -46,9 +46,10 @@ template <unsigned N>
 class Board
 {
 public:
-   Board(PLT::Curses& win_) : win(win_)
+   Board(PLT::Curses& win_)
+      : win(win_)
    {
-      offset_x = (win.cols  - X_SIZE) / 2;
+      offset_x = (win.cols - X_SIZE) / 2;
       offset_y = 1 + (win.lines - Y_SIZE) / 2;
 
       clear();
@@ -92,7 +93,7 @@ public:
    void showAction(const Pos60& pos, Action action)
    {
       unsigned x, y;
-      if (!getXY(pos, x, y)) return;
+      if(!getXY(pos, x, y)) return;
 
       char lch{}, rch{};
 
@@ -114,47 +115,47 @@ public:
 
    void clear()
    {
-      for(unsigned y=0; y<Y_SIZE; y++)
+      for(unsigned y = 0; y < Y_SIZE; y++)
       {
-         for(unsigned x=0; x<X_SIZE; x++)
+         for(unsigned x = 0; x < X_SIZE; x++)
          {
             cell[x][y] = INVALID;
          }
 
          // 'n' the number of empty cells in this row
-         unsigned  n;
+         unsigned n;
 
               if (y <  N)        n =      y + 1;
          else if (y < (N*2 + 1)) n = Y_SIZE - y;
          else if (y < (N*3 + 1)) n =      y + 1;
          else                    n = Y_SIZE - y;
 
-         unsigned middle_x = N*3;
-         unsigned x        = middle_x + 1 - n; 
+         unsigned middle_x = N * 3;
+         unsigned x        = middle_x + 1 - n;
 
-         for(unsigned i=0; i<n; i++)
+         for(unsigned i = 0; i < n; i++)
          {
             cell[x][y] = EMPTY;
             x += 2;
          }
       }
 
-      for(unsigned player=1; player<=6; player++)
+      for(unsigned player = 1; player <= 6; player++)
       {
-         Dir60  dir(player + 2);
-         Pos60  row(dir, N);
+         Dir60 dir(player + 2);
+         Pos60 row(dir, N);
 
          dir.rotLeft();
          row.move(dir);
 
-         Dir60  across = dir;
+         Dir60 across = dir;
          across.rotLeft();
 
-         for(unsigned j=N; j>=1; j--)
+         for(unsigned j = N; j >= 1; j--)
          {
             Pos60 pos = row;
 
-            for(unsigned k=0; k<j; k++)
+            for(unsigned k = 0; k < j; k++)
             {
                setHome(pos, player);
 
@@ -169,7 +170,7 @@ public:
    void setWait(bool wait) const
    {
       static int prev_timeout{0};
-      if (wait)
+      if(wait)
       {
          prev_timeout = win.timeout(0);
       }
@@ -181,22 +182,22 @@ public:
 
    void refresh() const
    {
-      for(unsigned y=0; y<Y_SIZE; y++)
+      for(unsigned y = 0; y < Y_SIZE; y++)
       {
          win.move(y + offset_y, offset_x);
 
-         for(unsigned x=0; x<X_SIZE; x++)
+         for(unsigned x = 0; x < X_SIZE; x++)
          {
             uint8_t c    = cell[x][y];
             uint8_t peg  = c & 0x0F;
             uint8_t hole = (c & 0xF0) >> 4;
 
-            if (peg != 0)
+            if(peg != 0)
             {
                win.fgcolour(peg);
                win.addch('o');
             }
-            else if (hole != 0)
+            else if(hole != 0)
             {
                win.fgcolour(hole);
                win.addch('.');
@@ -223,7 +224,7 @@ private:
    void setCell(const Pos60& pos, uint8_t mask, uint8_t value)
    {
       unsigned x, y;
-      if (getXY(pos, x, y))
+      if(getXY(pos, x, y))
       {
          cell[x][y] = (cell[x][y] & mask) | value;
       }
@@ -235,18 +236,18 @@ private:
       return getXY(pos, x, y) ? cell[x][y] : INVALID;
    }
 
-   static const uint8_t  INVALID = 0x00;
-   static const uint8_t  EMPTY   = 0x70;
+   static const uint8_t INVALID = 0x00;
+   static const uint8_t EMPTY   = 0x70;
 
-   static const unsigned OFFSET_X = N*3;
-   static const unsigned OFFSET_Y = N*2;
+   static const unsigned OFFSET_X = N * 3;
+   static const unsigned OFFSET_Y = N * 2;
 
-   static const unsigned X_SIZE   = OFFSET_X * 2 + 1;
-   static const unsigned Y_SIZE   = OFFSET_Y * 2 + 1;
+   static const unsigned X_SIZE = OFFSET_X * 2 + 1;
+   static const unsigned Y_SIZE = OFFSET_Y * 2 + 1;
 
-   PLT::Curses&  win;
-   unsigned      offset_x, offset_y;
-   uint8_t       cell[X_SIZE][Y_SIZE];
+   PLT::Curses& win;
+   unsigned     offset_x, offset_y;
+   uint8_t      cell[X_SIZE][Y_SIZE];
 };
 
 #endif

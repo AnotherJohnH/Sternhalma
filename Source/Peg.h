@@ -26,17 +26,13 @@
 #include "Board.h"
 #include "Move.h"
 
-template <unsigned N>
-class Peg
+template <unsigned N> class Peg
 {
 public:
    const Pos60& getPos() const { return pos; }
          Pos60& getPos()       { return pos; }
 
-   bool isHome() const
-   {
-      return board->isPegHome(pos);
-   }
+   bool isHome() const { return board->isPegHome(pos); }
 
    //! Initialise a peg and place it in it's starting position
    void initialise(Board<N>&    board_,
@@ -56,7 +52,7 @@ public:
    {
       Pos60 to(pos, dir, 1);
 
-      if (!board->isEmpty(to)) return false;
+      if(!board->isEmpty(to)) return false;
 
       move(to);
       return true;
@@ -67,11 +63,11 @@ public:
    {
       Pos60 to(pos, dir, 1);
 
-      if (!board->isOccupied(to)) return false;
+      if(!board->isOccupied(to)) return false;
 
       to.move(dir, 1);
 
-      if (!board->isEmpty(to)) return false;
+      if(!board->isEmpty(to)) return false;
 
       move(to);
       return true;
@@ -89,34 +85,34 @@ public:
       {
          Pos60 to(pos, dir, 1);
 
-         if (board->isEmpty(to))
+         if(board->isEmpty(to))
          {
             // Can step
-            Move  move(pos);
+            Move move(pos);
 
             move.step(dir);
 
             addMove(move, keep_all_moves);
          }
-         else if (board->isOccupied(to))
+         else if(board->isOccupied(to))
          {
-             // Might be able to hop
-             to.move(dir, 1);
+            // Might be able to hop
+            to.move(dir, 1);
 
-             if (board->isEmpty(to))
-             {
-                // Can hop
-                Move  move(pos);
+            if(board->isEmpty(to))
+            {
+               // Can hop
+               Move move(pos);
 
-                move.hop(dir);
+               move.hop(dir);
 
-                addMove(move, keep_all_moves);
+               addMove(move, keep_all_moves);
 
-                tryAnotherHop(move, keep_all_moves);
-             }
+               tryAnotherHop(move, keep_all_moves);
+            }
          }
 
-         if (dir == 330) break;
+         if(dir == 330) break;
       }
 
       return best_move_score;
@@ -126,7 +122,7 @@ public:
    //  Returns true when the move is complete
    bool doBestMove(bool start_move)
    {
-      if (start_move)
+      if(start_move)
       {
          board->showAction(pos, ACT_PICK);
 
@@ -136,17 +132,17 @@ public:
 
       board->showAction(pos, ACT_NONE);
 
-      if (pos == best_move->getEnd())
+      if(pos == best_move->getEnd())
       {
          return true;
       }
 
       Pos60 next_pos = pos;
-      Dir60 dir = *move_it;
+      Dir60 dir      = *move_it;
       next_pos.move(dir, best_move->isStep() ? 1 : 2);
       move(next_pos);
 
-      if (pos == best_move->getEnd())
+      if(pos == best_move->getEnd())
       {
          board->showAction(pos, ACT_DROP);
       }
@@ -161,7 +157,7 @@ public:
 private:
    void move(const Pos60& pos_)
    {
-      if (board->isOccupied(pos))
+      if(board->isOccupied(pos))
       {
          board->setEmpty(pos);
       }
@@ -174,19 +170,19 @@ private:
    {
       for(Dir60 dir; true; dir.rotRight())
       {
-         if (move.isAnotherHopOk(dir))
+         if(move.isAnotherHopOk(dir))
          {
             Pos60 to(move.getEnd(), dir, 1);
 
-            if (board->isOccupied(to))
+            if(board->isOccupied(to))
             {
                // Might be able to hop
                to.move(dir, 1);
 
-               if (board->isEmpty(to))
+               if(board->isEmpty(to))
                {
                   // Can hop
-                  Move  another_move = move;
+                  Move another_move = move;
 
                   another_move.hop(dir);
 
@@ -197,7 +193,7 @@ private:
             }
          }
 
-         if (dir == 330) break;
+         if(dir == 330) break;
       }
    }
 
@@ -206,16 +202,16 @@ private:
       unsigned score   = evaluate(move);
       bool     is_best = score > best_move_score;
 
-      if (keep_all_moves || is_best)
+      if(keep_all_moves || is_best)
       {
-         if (!keep_all_moves)
+         if(!keep_all_moves)
          {
             move_list.clear();
          }
 
          move_list.push_back(move);
 
-         if (is_best)
+         if(is_best)
          {
             best_move_score = score;
             best_move       = &move_list.back();
@@ -239,15 +235,15 @@ private:
       return 1000000 + dist_before - dist_after;
    }
 
-   Board<N>*  board{nullptr};
-   uint8_t    id{0};
-   Pos60      target;
-   Pos60      pos;
-   MoveList   move_list;
-   unsigned   best_move_score{0};
-   Move*      best_move{nullptr};
+   Board<N>* board{nullptr};
+   uint8_t   id{0};
+   Pos60     target;
+   Pos60     pos;
+   MoveList  move_list;
+   unsigned  best_move_score{0};
+   Move*     best_move{nullptr};
 
-   std::vector<Dir60>::const_iterator  move_it;
+   std::vector<Dir60>::const_iterator move_it;
 };
 
 #endif

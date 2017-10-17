@@ -22,34 +22,34 @@
 
 #include "Game.h"
 
-#include  "TerminalApp.h"
+#include "TerminalApp.h"
 
-#include  "PLT/Event.h"
+#include "PLT/Event.h"
 
 
-#define  PROGRAM         "Sternhalma"
-#define  DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
-#define  COPYRIGHT_YEAR  "2017"
-#define  AUTHOR          "John D. Haughton"
-#define  VERSION         PROJ_VERSION
+#define PROGRAM         "Sternhalma"
+#define DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
+#define COPYRIGHT_YEAR  "2017"
+#define AUTHOR          "John D. Haughton"
+#define VERSION         PROJ_VERSION
 
 
 class Sternhalma : public TerminalApp
 {
 private:
-   GameOptions  options;
+   GameOptions options;
 
    template <unsigned SIZE>
    void play(PLT::Curses& win)
    {
-      Game<SIZE>  game(win, options);
+      Game<SIZE> game(win, options);
 
       PLT::mainLoop(Game<SIZE>::doIterate, &game);
    }
 
    virtual int startTerminalApp(PLT::Device& term) override
    {
-      PLT::Curses  win(&term);
+      PLT::Curses win(&term);
 
       win.clear();
 
@@ -76,8 +76,4 @@ public:
 };
 
 
-int main(int argc, const char *argv[])
-{
-   Sternhalma(argc, argv);
-}
-
+int main(int argc, const char* argv[]) { Sternhalma(argc, argv); }

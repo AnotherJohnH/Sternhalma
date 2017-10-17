@@ -23,8 +23,8 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include <vector>
 #include <cassert>
+#include <vector>
 
 #include "Pos60.h"
 
@@ -37,11 +37,11 @@ public:
       , end(start_)
    {}
 
-   bool          empty()    const { return directions.empty(); }
-   bool          isStep()   const { return is_step; }
-   bool          isHop()    const { return !empty() && !isStep(); }
-   const Pos60&  getStart() const { return start; }
-   const Pos60&  getEnd()   const { return end; }
+   bool         empty()    const { return directions.empty(); }
+   bool         isStep()   const { return is_step; }
+   bool         isHop()    const { return !empty() && !isStep(); }
+   const Pos60& getStart() const { return start; }
+   const Pos60& getEnd()   const { return end; }
 
    const std::vector<Dir60>& getDirections() const { return directions; }
 
@@ -54,13 +54,13 @@ public:
 
       Pos60 pos = start;
 
-      if (new_end == pos) return false;
+      if(new_end == pos) return false;
 
       for(const auto& dir : directions)
       {
          pos.move(dir, 2);
 
-         if (new_end == pos) return false;
+         if(new_end == pos) return false;
       }
 
       return true;
@@ -71,7 +71,7 @@ public:
    {
       assert(directions.empty());
 
-      is_step  = true;
+      is_step = true;
       directions.push_back(dir);
 
       end.move(dir, 1);
@@ -88,11 +88,11 @@ public:
    }
 
 private:
-   Pos60               start;
-   bool                is_step{false};
-   std::vector<Dir60>  directions;
-   Pos60               end;
-   unsigned            score{0};
+   Pos60              start;
+   bool               is_step{false};
+   std::vector<Dir60> directions;
+   Pos60              end;
+   unsigned           score{0};
 };
 
 using MoveList = std::vector<Move>;
