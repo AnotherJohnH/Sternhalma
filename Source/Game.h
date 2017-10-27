@@ -48,7 +48,7 @@ public:
       MID_TURN
    };
 
-   PLT::Curses&       win;
+   TRM::Curses&       win;
    const GameOptions& options;
    Board<SIZE>        board;
    Player<SIZE>       players[6];
@@ -57,7 +57,7 @@ public:
    unsigned           turn{0};
    Mode               mode{START_GAME};
 
-   Game(PLT::Curses& win_, const GameOptions& options_)
+   Game(TRM::Curses& win_, const GameOptions& options_)
       : win(win_)
       , options(options_)
       , board(win_)

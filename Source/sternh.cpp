@@ -22,34 +22,33 @@
 
 #include "Game.h"
 
-#include "TerminalApp.h"
+#include "TRM/App.h"
 
 #include "PLT/Event.h"
 
+#define  PROGRAM         "Sternhalma"
+#define  DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
+#define  COPYRIGHT_YEAR  "2017"
+#define  AUTHOR          "John D. Haughton"
+#define  VERSION         PROJ_VERSION
 
-#define PROGRAM         "Sternhalma"
-#define DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
-#define COPYRIGHT_YEAR  "2017"
-#define AUTHOR          "John D. Haughton"
-#define VERSION         PROJ_VERSION
 
-
-class Sternhalma : public TerminalApp
+class SternhalmaApp : public TRM::App
 {
 private:
    GameOptions options;
 
    template <unsigned SIZE>
-   void play(PLT::Curses& win)
+   void play(TRM::Curses& win)
    {
       Game<SIZE> game(win, options);
 
-      PLT::mainLoop(Game<SIZE>::doIterate, &game);
+      PLT::Event::mainLoop(Game<SIZE>::doIterate, &game);
    }
 
-   virtual int startTerminalApp(PLT::Device& term) override
+   virtual int startTerminalApp(TRM::Device& term) override
    {
-      PLT::Curses win(&term);
+      TRM::Curses win(&term);
 
       win.clear();
 
@@ -68,12 +67,15 @@ private:
    }
 
 public:
-   Sternhalma(int argc_, const char* argv_[])
-      : TerminalApp(PROGRAM, AUTHOR, DESCRIPTION, VERSION, COPYRIGHT_YEAR)
+   SternhalmaApp(int argc, const char* argv[])
+      : TRM::App(PROGRAM, AUTHOR, DESCRIPTION, VERSION, COPYRIGHT_YEAR)
    {
-      parseArgsAndStart(argc_, argv_);
+      parseArgsAndStart(argc, argv);
    }
 };
 
 
-int main(int argc, const char* argv[]) { Sternhalma(argc, argv); }
+int main(int argc, const char* argv[])
+{
+   SternhalmaApp(argc, argv);
+}

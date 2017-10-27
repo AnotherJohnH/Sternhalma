@@ -28,7 +28,7 @@
 #include <cstdio>
 #include <vector>
 
-#include "PLT/Curses.h"
+#include "TRM/Curses.h"
 
 #include "Pos60.h"
 
@@ -46,7 +46,7 @@ template <unsigned N>
 class Board
 {
 public:
-   Board(PLT::Curses& win_)
+   Board(TRM::Curses& win_)
       : win(win_)
    {
       offset_x = (win.cols - X_SIZE) / 2;
@@ -245,7 +245,7 @@ private:
    static const unsigned X_SIZE = OFFSET_X * 2 + 1;
    static const unsigned Y_SIZE = OFFSET_Y * 2 + 1;
 
-   PLT::Curses& win;
+   TRM::Curses& win;
    unsigned     offset_x, offset_y;
    uint8_t      cell[X_SIZE][Y_SIZE];
 };
