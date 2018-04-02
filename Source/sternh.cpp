@@ -28,6 +28,7 @@
 
 #define  PROGRAM         "Sternhalma"
 #define  DESCRIPTION     "Sternhalma (aka Chinese Chequers)"
+#define  LINK            "https://github.com/AnotherJohnH/Platform"
 #define  COPYRIGHT_YEAR  "2017"
 #define  AUTHOR          "John D. Haughton"
 #define  VERSION         PROJ_VERSION
@@ -68,7 +69,7 @@ private:
 
 public:
    SternhalmaApp(int argc, const char* argv[])
-      : TRM::App(PROGRAM, AUTHOR, DESCRIPTION, VERSION, COPYRIGHT_YEAR)
+      : TRM::App(PROGRAM, DESCRIPTION, LINK, AUTHOR, VERSION, COPYRIGHT_YEAR)
    {
       parseArgsAndStart(argc, argv);
    }
