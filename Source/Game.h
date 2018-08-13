@@ -32,7 +32,7 @@
 struct GameOptions
 {
    STB::Option<unsigned> num_players{  'p', "players", "Number of players", 2};
-   STB::Option<unsigned> size{         's', "size",    "Size [3-9]", 5};
+   STB::Option<unsigned> size{         's', "size",    "Size (3..9)", 5};
    STB::Option<unsigned> speed{        'T', "speed",   "Speed of play (ms)", 500};
    STB::Option<unsigned> human_players{'H', "humans",  "Number of humans", 0};
 };
