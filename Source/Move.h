@@ -92,7 +92,6 @@ private:
    bool               is_step{false};
    std::vector<Dir60> directions;
    Pos60              end;
-   unsigned           score{0};
 };
 
 using MoveList = std::vector<Move>;
