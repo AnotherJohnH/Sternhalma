@@ -4,4 +4,4 @@
 *.tgz
 .DS_Store
 .sconsign.dblite
-sternh
+build
