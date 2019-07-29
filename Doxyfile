@@ -6,7 +6,7 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "Sternhalma"
 PROJECT_NUMBER         =
-PROJECT_BRIEF          = "Empty application"
+PROJECT_BRIEF          = "Also known as Chinese Chequers"
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
