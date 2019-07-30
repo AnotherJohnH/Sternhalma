@@ -1,10 +1,7 @@
 
-os:
-   - linux
-   - osx
-
 dist: xenial
 sudo: required
+language: cpp
 
 addons:
   apt:
@@ -14,7 +11,20 @@ addons:
 before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2; fi
 
-language: cpp
+os:
+   - linux
+   - osx
+
+compiler:
+   - clang
+   - gcc
+
+matrix:
+   exclude:
+   - os: linux
+     compiler: clang
+   - os: osx
+     compiler: gcc
 
 script:
    - mkdir build
@@ -22,6 +32,14 @@ script:
    - cmake ..
    - make package
 
-compiler:
-   - clang
-   - gcc
+deploy:
+   provider: releases
+   api_key:
+      secure: "ECjiH1z0SPpMXWu/0s5ODkZf0ZeqeS6jYv3kqVFOV/NWNrsyKGMhyZ7dbpK9Yu5q5NhKLN4FK7QDcNA2v0MH8Le4FcACcOvlaBOhUzEy4wcV0uM1y0FE+hw0YzM9fKKX30+VeA8WG56qMi1QKKdms64IXvMNHFCNnjxyckpPBuwxcSAbdeGiX19pbYuqltzqKA1JoRZvGc7PpbR8ZlrDBwGejkS7tYAIGG2ifYT0Z3WaOvWfY6j9AgFuHZ3jkY/+/KKsck+uz8XidW+3PCYe5STvC2bybI/ng0oWZf+huP4Xi09sO6XcMFjonDWBp7ymBkG8fsDTvAZ4/VzZoIAyoCR/xymctGV9NPEcyLhxs6Nmvtg9jjc0MXgHZppFP7QUjDNvpUp/rYPbYUi17NB9rjccWzCgAvHIftSTbbpvk53dI20NqGwleWsZbATFIw1MolNTRji75JrB1YYPEyB4OyMjEJxOXYCAP1flSv11HG3B4gBqqLXiyW3IvinwmGlUW6AEJZZismOOkAlJOC8L8O2M/nTvI58LkBCGdy8A/r1P+5e0Y/ORXCv4iXzoUKbaCgBR9snPVVHXvCF+G4KfWl8XBCG6txnIjvOhhusFi7eeyR8r0/Ar8PDyJEQivQOwxMNw72R9rJEApbO4Ay9xbw6c6/wb+ZHzV1arAVlf2SY="
+   file_glob: true
+   file: "*.tar.gz"
+   overwrite: true
+   skip_cleanup: true
+   on:
+      tags: true
+

@@ -22,7 +22,7 @@
 
 set(app     Sternhalma)
 set(author  John D. Haughton)
-set(version 0.0.2)
+set(version 0.1.0)
 
 set(source  Source/sternh.cpp)
 set(binary  sternh)
