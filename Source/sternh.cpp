@@ -66,15 +66,14 @@ private:
    }
 
 public:
-   SternhalmaApp(int argc, const char* argv[])
+   SternhalmaApp()
       : TRM::App(PROGRAM, DESCRIPTION, LINK, AUTHOR, COPYRIGHT_YEAR)
    {
-      parseArgsAndStart(argc, argv);
    }
 };
 
 
 int main(int argc, const char* argv[])
 {
-   SternhalmaApp(argc, argv);
+   return SternhalmaApp().parseArgsAndStart(argc, argv);
 }
