@@ -14,3 +14,12 @@ running on a Kindle a third-party terminal emulator and launcher is not necessar
 
 See the [Platform](https://github.com/AnotherJohnH/Platform) project for supported platforms
 and coding style.
+
+## How to build
+
+Build using cmake.
+
+mkdir build
+cd build
+cmake ..
+make
