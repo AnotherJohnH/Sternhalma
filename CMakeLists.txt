@@ -20,16 +20,20 @@
 #  SOFTWARE.
 #-------------------------------------------------------------------------------
 
-set(app     Sternhalma)
+cmake_minimum_required(VERSION 3.11.4)
+cmake_policy(SET CMP0048 NEW) # Humph! don't like having to do this
+
+project(Sternhalma
+        VERSION   0.1.0
+        LANGUAGES C CXX ASM)
+
 set(author  John D. Haughton)
-set(version 0.1.0)
 
 set(source  Source/sternh.cpp)
 set(binary  sternh)
 
 #-------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.11.4)
 include(Platform/build.cmake NO_POLICY_SCOPE)
 
 #-------------------------------------------------------------------------------
