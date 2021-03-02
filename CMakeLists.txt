@@ -22,18 +22,19 @@
 
 cmake_minimum_required(VERSION 3.11.4)
 
-project(Sternhalma
-        VERSION   0.1.0
-        LANGUAGES C CXX ASM)
+set(CMAKE_PROJECT_VERSION "0.1.0")
 
-set(author  John D. Haughton)
-
-set(source  Source/sternh.cpp)
-set(binary  sternh)
+include(Platform/build.cmake NO_POLICY_SCOPE)
 
 #-------------------------------------------------------------------------------
 
-include(Platform/build.cmake NO_POLICY_SCOPE)
+project(Sternhalma
+        LANGUAGES C CXX ASM)
+
+set(author  "John D. Haughton")
+
+set(source  Source/sternh.cpp)
+set(binary  sternh)
 
 #-------------------------------------------------------------------------------
 
