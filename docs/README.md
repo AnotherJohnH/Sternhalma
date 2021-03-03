@@ -7,7 +7,7 @@ running on a Kindle a third-party terminal emulator and launcher is not necessar
 
 ## Status
 
-[![Build Status](https://travis-ci.org/AnotherJohnH/Sternhalma.svg?branch=master)](https://travis-ci.org/AnotherJohnH/Sternhalma)
+[![Build Status](https://github.com/AnotherJohnH/Sternhalma/actions/workflows/build_on_push.yml/badge.svg)](https://github.com/AnotherJohnH/Sternhalma/actions/workflows/build_on_push.yml)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/13930/badge.svg)](https://scan.coverity.com/projects/anotherjohnh-sternhalma)
 
 ## Portability and style

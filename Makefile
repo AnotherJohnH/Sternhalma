@@ -1,17 +1,7 @@
 
-EXECUTABLE = mines
+targets = native Emscripten
 
-#-------------------------------------------------------------------------------
-
-all: native Emscripten
-
-clean:
-	rm -rf build_*
-
-debug:
-	Platform/BUILD.py native -s -d
-
-#-------------------------------------------------------------------------------
+all: $(targets)
 
 docs: Emscripten
 	cp build_Emscripten/sternh.html docs
@@ -19,13 +9,4 @@ docs: Emscripten
 	cp build_Emscripten/sternh.wasm docs
 	doxygen
 
-#-------------------------------------------------------------------------------
-
-native:
-	Platform/BUILD.py native
-
-Emscripten:
-	Platform/BUILD.py Emscripten
-
-mbedLPC1768:
-	Platform/BUILD.py mbedLPC1768
+include Platform/build.make
