@@ -87,10 +87,10 @@ public:
          break;
 
       case START_TURN:
-         sprintf(text, "Player %d", i + 1);
+         snprintf(text, sizeof(text), "Player %d", i + 1);
          win.mvaddstr(1, win.cols - 15, text);
 
-         sprintf(text, "%3u", ++turn);
+         snprintf(text, sizeof(text), "%3u", ++turn);
          win.mvaddstr(1, win.cols - 3, text);
 
       case MID_TURN:
