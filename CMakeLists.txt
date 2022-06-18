@@ -20,24 +20,18 @@
 #  SOFTWARE.
 #-------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.11.4)
+cmake_minimum_required(VERSION 3.19.0)
 
 project(Sternhalma
-        VERSION   0.1.0
-        LANGUAGES C CXX ASM)
+        LANGUAGES CXX
+        VERSION   0.1.0)
 
-include(Platform/build.cmake NO_POLICY_SCOPE)
-
-#-------------------------------------------------------------------------------
-
-set(author  "John D. Haughton")
-
-set(source  Source/sternh.cpp)
-set(binary  sternh)
+include(Platform/config.cmake)
 
 #-------------------------------------------------------------------------------
 
-add_executable(${binary} ${source})
-target_link_libraries(${binary} ${PLT_libs})
+add_executable(sternh Source/sternh.cpp)
 
-install(TARGETS ${binary} RUNTIME DESTINATION bin)
+target_link_libraries(sternh PLT)
+
+install(TARGETS sternh RUNTIME DESTINATION bin)
